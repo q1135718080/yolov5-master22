@@ -1,5 +1,5 @@
 train: ./mark/train/images
-val: ./mark/train/images
+val: ./mark/test/images
 
 nc: 2
 names: ['mask', 'no-mask']
