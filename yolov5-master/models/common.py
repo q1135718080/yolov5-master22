@@ -14,6 +14,7 @@ from utils.plots import color_list
 
 def autopad(k, p=None):  # kernel, padding
     # Pad to 'same'
+    # //-----取整除，向下取接近商的整数 k = 1  1//2 = 0
     if p is None:
         p = k // 2 if isinstance(k, int) else [x // 2 for x in k]  # auto-pad
     return p
@@ -30,8 +31,8 @@ class Conv(nn.Module):
         super(Conv, self).__init__()
         self.conv = nn.Conv2d(c1, c2, k, s, autopad(k, p), groups=g, bias=False)
         self.bn = nn.BatchNorm2d(c2)
-        # self.act = nn.Hardswish() if act else nn.Identity()
-        self.act = nn.SiLU() if act is True else (act if isinstance(act, nn.Module) else nn.Identity())
+        self.act = nn.Hardswish() if act else nn.Identity()
+        # self.act = nn.SiLU() if act is True else (act if isinstance(act, nn.Module) else nn.Identity())
         # self.act = nn.LeakyReLU()
         # self.act = nn.SiLU()
 
