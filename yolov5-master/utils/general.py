@@ -252,7 +252,19 @@ def box_iou(box1, box2):
 
     # inter(N,M) = (rb(N,M,2) - lt(N,M,2)).clamp(0).prod(2)
     inter = (torch.min(box1[:, None, 2:], box2[:, 2:]) - torch.max(box1[:, None, :2], box2[:, :2])).clamp(0).prod(2)
-    return inter / (area1[:, None] + area2 - inter)  # iou = inter / (area1 + area2 - inter)
+
+    # --------------DiOU------------------
+    iou_ini = inter / (area1[:, None] + area2 - inter)  # iou = inter / (area1 + area2 - inter)
+
+    rho_2 = ((box2[0] + box2[2] - box1[0] - box1[2]) ** 2 + (
+            box2[1] + box2[3] - box1[1] - box1[3]) ** 2) / 4  # center distance squared
+    cw = torch.max(box1[2], box2[2]) - torch.min(box1[0], box2[0])  # convex (smallest enclosing box) width
+    ch = torch.max(box1[3], box2[3]) - torch.min(box1[1], box2[1])
+    c2 = cw ** 2 + ch ** 2
+    return 1 - iou_ini + rho_2 / c2  # diou = iou - rho2 / c2
+    # -----------------------------------
+
+    # return inter / (area1[:, None] + area2 - inter)
 
 
 def wh_iou(wh1, wh2):
