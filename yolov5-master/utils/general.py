@@ -225,12 +225,12 @@ def bbox_iou(box1, box2, x1y1x2y2=True, GIoU=False, DIoU=False, CIoU=False, EIoU
                     alpha = v / ((1 + eps) - iou + v)
                 return iou - (rho2 / c2 + v * alpha)  # CIoU
             elif EIoU:
-                c2_w = cw ** 2 + eps
-                c2_h = ch ** 2 + eps
+                c2_w = cw ** 2
+                c2_h = ch ** 2
                 rho2_w = (w2 - w1) ** 2
                 rho2_h = (h2 - h1) ** 2
 
-                return iou - (rho2 / c2) - (rho2_w / c2_w) - (rho2_h / c2_h)
+                return iou - (rho2 / c2 + rho2_w / c2_w + rho2_h / c2_h)  # EIoU
             elif F_EIoU:
                 c2_w = cw ** 2 + eps
                 c2_h = ch ** 2 + eps
