@@ -230,14 +230,14 @@ def bbox_iou(box1, box2, x1y1x2y2=True, GIoU=False, DIoU=False, CIoU=False, EIoU
                 rho2_w = (w2 - w1) ** 2
                 rho2_h = (h2 - h1) ** 2
 
-                return iou - (rho2 / c2 + rho2_w / c2_w + rho2_h / c2_h)  # EIoU
+                return iou - (rho2 / c2 + rho2_w / c2_w + rho2_h / c2_h)  # EIoU_loss
             elif F_EIoU:
                 c2_w = cw ** 2 + eps
                 c2_h = ch ** 2 + eps
                 rho2_w = (w2 - w1) ** 2
                 rho2_h = (h2 - h1) ** 2
                 eou = 1 - iou + (rho2 / c2) + (rho2_w / c2_w) + (rho2_h / c2_h)
-                return 1 - pow(iou, 0.5) * eou
+                return iou**0.5 * eou
 
         else:  # GIoU https://arxiv.org/pdf/1902.09630.pdf
             c_area = cw * ch + eps  # convex area
